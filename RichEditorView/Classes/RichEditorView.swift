@@ -514,7 +514,7 @@ import UIKit
     /// Called when actions are received from JavaScript
     /// - parameter method: String with the name of the method and optional parameters that were passed in
     private func performCommand(_ method: String) {
-        if method.hasPrefix("focus") {
+        if method.hasPrefix("ready") {
             // If loading for the first time, we have to set the content HTML to be displayed
             if !isEditorLoaded {
                 isEditorLoaded = true
