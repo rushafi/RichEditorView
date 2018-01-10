@@ -58,7 +58,6 @@ extension ViewController: RichEditorDelegate {
 	func richEditorDidLoad(_ editor: RichEditorView) {
 		editorView.setFont(UIFont(name: "Avenir-Book", size: 14)!)
 	}
-
 }
 
 extension ViewController: RichEditorToolbarDelegate {

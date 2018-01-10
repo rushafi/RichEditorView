@@ -135,22 +135,21 @@ import UIKit
     }
     
     private func setup() {
-        backgroundColor = .red
-        
         webView.frame = bounds
         webView.delegate = self
         webView.keyboardDisplayRequiresUserAction = false
         webView.scalesPageToFit = false
         webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         webView.dataDetectorTypes = UIDataDetectorTypes()
-        webView.backgroundColor = .white
-        
+
         webView.scrollView.isScrollEnabled = isScrollEnabled
         webView.scrollView.bounces = false
         webView.scrollView.delegate = self
         webView.scrollView.clipsToBounds = false
         
         webView.cjw_inputAccessoryView = nil
+		webView.isOpaque = false
+		webView.backgroundColor = backgroundColor
         
         self.addSubview(webView)
         
@@ -500,7 +499,7 @@ import UIKit
                 placeholder = placeholderText
                 lineHeight = innerLineHeight
                 delegate?.richEditorDidLoad?(self)
-            }
+			}
             updateHeight()
         }
         else if method.hasPrefix("input") {
