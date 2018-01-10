@@ -232,6 +232,12 @@ import UIKit
     public func setFontSize(_ size: Int) {
         runJS("RE.setFontSize('\(size)px');")
     }
+
+	public func setFont(_ font: UIFont) {
+		let pointSize = font.pointSize
+		let fontName = font.fontName
+		runJS("RE.setFont('\(pointSize)pt \(fontName)');")
+	}
     
     public func setEditorBackgroundColor(_ color: UIColor) {
         runJS("RE.setBackgroundColor('\(color.hex)');")
@@ -485,7 +491,7 @@ import UIKit
     /// Called when actions are received from JavaScript
     /// - parameter method: String with the name of the method and optional parameters that were passed in
     private func performCommand(_ method: String) {
-        if method.hasPrefix("ready") {
+        if method.hasPrefix("focus") {
             // If loading for the first time, we have to set the content HTML to be displayed
             if !isEditorLoaded {
                 isEditorLoaded = true

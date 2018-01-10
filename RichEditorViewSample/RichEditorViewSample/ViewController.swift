@@ -39,6 +39,10 @@ class ViewController: UIViewController {
         toolbar.options = options
     }
 
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+	}
+
 }
 
 extension ViewController: RichEditorDelegate {
@@ -50,7 +54,11 @@ extension ViewController: RichEditorDelegate {
             htmlTextView.text = content
         }
     }
-    
+
+	func richEditorDidLoad(_ editor: RichEditorView) {
+		editorView.setFont(UIFont(name: "Avenir-Book", size: 14)!)
+	}
+
 }
 
 extension ViewController: RichEditorToolbarDelegate {
