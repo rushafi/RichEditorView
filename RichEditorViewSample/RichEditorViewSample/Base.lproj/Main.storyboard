@@ -48,6 +48,11 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="259" id="bsu-3N-XOc"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="size" keyPath="contentInset">
+                                        <size key="value" width="15" height="15"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </view>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="HTML Preview" translatesAutoresizingMaskIntoConstraints="NO" id="nPH-ii-3sD">
                                 <rect key="frame" x="0.0" y="325" width="375" height="342"/>

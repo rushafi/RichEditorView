@@ -22,7 +22,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         editorView.delegate = self
         editorView.inputAccessoryView = toolbar
 

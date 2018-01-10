@@ -135,7 +135,7 @@ import UIKit
     }
     
     private func setup() {
-        webView.frame = bounds
+        webView.frame = bounds.insetBy(dx: contentInset.width, dy: contentInset.height)
         webView.delegate = self
         webView.keyboardDisplayRequiresUserAction = false
         webView.scalesPageToFit = false
@@ -187,6 +187,13 @@ import UIKit
     public var text: String {
         return runJS("RE.getText()")
     }
+
+	/// Content inset
+	@IBInspectable public var contentInset: CGSize = CGSize(width: 0, height: 0) {
+		didSet {
+			webView.frame = bounds.insetBy(dx: contentInset.width, dy: contentInset.height)
+		}
+	}
 
     /// Private variable that holds the placeholder text, so you can set the placeholder before the editor loads.
     private var placeholderText: String = ""
