@@ -121,6 +121,10 @@ RE.setPlaceholderColor = function(color) {
 	document.body.style.setProperty('--placeholder-color', color)
 };
 
+RE.setFontColor = function(color) {
+	document.body.style.setProperty('--font-color', color)
+};
+
 RE.updatePlaceholder = function() {
     if (RE.editor.textContent.length > 0) {
         RE.editor.classList.remove("placeholder");
@@ -134,11 +138,15 @@ RE.removeFormat = function() {
 };
 
 RE.setFontSize = function(size) {
-    RE.editor.style.fontSize = size;
+	document.body.style.setProperty('--font-size', size);
 };
 
 RE.setFont = function(font) {
-	RE.editor.style.font = font
+	RE.editor.style.font = font;
+};
+
+RE.setFontFamily = function(font) {
+	document.body.style.setProperty('--font-family', font);
 };
 
 RE.setBackgroundColor = function(color) {

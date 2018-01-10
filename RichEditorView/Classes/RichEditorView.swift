@@ -215,6 +215,15 @@ import UIKit
 		}
 	}
 
+	private var fontColorValue: UIColor = UIColor.white
+	open var fontColor: UIColor {
+		get { return fontColorValue }
+		set {
+			fontColorValue = newValue
+			runJS("RE.setFontColor('\(newValue.hex)');")
+		}
+	}
+
     /// The href of the current selection, if the current selection's parent is an anchor tag.
     /// Will be nil if there is no href, or it is an empty string.
     public var selectedHref: String? {
@@ -513,6 +522,7 @@ import UIKit
                 isContentEditable = editingEnabledVar
                 placeholder = placeholderText
 				placeholderColor = placeholderColorValue
+				fontColor = fontColorValue
                 lineHeight = innerLineHeight
                 delegate?.richEditorDidLoad?(self)
 			}

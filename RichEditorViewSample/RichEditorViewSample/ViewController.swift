@@ -26,7 +26,8 @@ class ViewController: UIViewController {
         editorView.delegate = self
         editorView.inputAccessoryView = toolbar
 		editorView.placeholder = "Type here"
-		editorView.placeholderColor = UIColor.red
+		editorView.placeholderColor = UIColor.gray
+		editorView.fontColor = UIColor.white
 
         toolbar.delegate = self
         toolbar.editor = editorView
@@ -58,7 +59,7 @@ extension ViewController: RichEditorDelegate {
     }
 
 	func richEditorDidLoad(_ editor: RichEditorView) {
-		editorView.setFont(UIFont(name: "Avenir-Book", size: 14)!)
+		editorView.setFont(UIFont(name: "Avenir-Book", size: 24)!)
 	}
 }
 
