@@ -47,7 +47,7 @@ div {
     content: attr(placeholder);
     position: absolute;
     top: 0px;
-    color: #cccccc;
+    color: var(--placeholder-color);
 }
 
 #editor {

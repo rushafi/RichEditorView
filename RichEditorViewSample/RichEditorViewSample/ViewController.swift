@@ -25,6 +25,8 @@ class ViewController: UIViewController {
 
         editorView.delegate = self
         editorView.inputAccessoryView = toolbar
+		editorView.placeholder = "Type here"
+		editorView.placeholderColor = UIColor.red
 
         toolbar.delegate = self
         toolbar.editor = editorView

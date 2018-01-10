@@ -117,6 +117,10 @@ RE.setPlaceholderText = function(text) {
     RE.editor.setAttribute("placeholder", text);
 };
 
+RE.setPlaceholderColor = function(color) {
+	document.body.style.setProperty('--placeholder-color', color)
+};
+
 RE.updatePlaceholder = function() {
     if (RE.editor.textContent.length > 0) {
         RE.editor.classList.remove("placeholder");
