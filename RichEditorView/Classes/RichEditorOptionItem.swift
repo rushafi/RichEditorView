@@ -21,7 +21,7 @@ public protocol RichEditorOption {
     /// The action to be evoked when the action is tapped
     /// - parameter editor: The RichEditorToolbar that the RichEditorOption was being displayed in when tapped.
     ///                     Contains a reference to the `editor` RichEditorView to perform actions on.
-    func action(_ editor: RichEditorToolbar)
+	func action(_ editor: RichEditorToolbar, _ item: RichBarButtonItem)
 }
 
 /// RichEditorOptionItem is a concrete implementation of RichEditorOption.
@@ -35,9 +35,9 @@ public struct RichEditorOptionItem: RichEditorOption {
     public var title: String
 
     /// The action to be performed when tapped
-    public var handler: ((RichEditorToolbar) -> Void)
+    public var handler: ((RichEditorToolbar, RichBarButtonItem) -> Void)
 
-    public init(image: UIImage?, title: String, action: @escaping ((RichEditorToolbar) -> Void)) {
+    public init(image: UIImage?, title: String, action: @escaping ((RichEditorToolbar, RichBarButtonItem) -> Void)) {
         self.image = image
         self.title = title
         self.handler = action
@@ -45,8 +45,8 @@ public struct RichEditorOptionItem: RichEditorOption {
     
     // MARK: RichEditorOption
     
-    public func action(_ toolbar: RichEditorToolbar) {
-        handler(toolbar)
+	public func action(_ toolbar: RichEditorToolbar, _ item: RichBarButtonItem) {
+        handler(toolbar, item)
     }
 }
 
@@ -74,7 +74,7 @@ public enum RichEditorDefaultOption: RichEditorOption {
     case alignRight
     case image
     case link
-    
+
     public static let all: [RichEditorDefaultOption] = [
         .clear,
         .undo, .redo, .bold, .italic,
@@ -93,19 +93,19 @@ public enum RichEditorDefaultOption: RichEditorOption {
         case .clear: name = "clear"
         case .undo: name = "undo"
         case .redo: name = "redo"
-        case .bold: name = "bold"
+        case .bold: name = "style-bold"
         case .italic: name = "italic"
         case .subscript: name = "subscript"
         case .superscript: name = "superscript"
-        case .strike: name = "strikethrough"
-        case .underline: name = "underline"
+        case .strike: name = "style-strike"
+        case .underline: name = "style-underline"
         case .textColor: name = "text_color"
         case .textBackgroundColor: name = "bg_color"
         case .header(let h): name = "h\(h)"
         case .indent: name = "indent"
         case .outdent: name = "outdent"
         case .orderedList: name = "ordered_list"
-        case .unorderedList: name = "unordered_list"
+        case .unorderedList: name = "style-unordered-list"
         case .alignLeft: name = "justify_left"
         case .alignCenter: name = "justify_center"
         case .alignRight: name = "justify_right"
@@ -143,7 +143,7 @@ public enum RichEditorDefaultOption: RichEditorOption {
         }
     }
     
-    public func action(_ toolbar: RichEditorToolbar) {
+	public func action(_ toolbar: RichEditorToolbar, _ item: RichBarButtonItem) {
         switch self {
         case .clear: toolbar.editor?.removeFormat()
         case .undo: toolbar.editor?.undo()

@@ -16,7 +16,6 @@ class ViewController: UIViewController {
 
     lazy var toolbar: RichEditorToolbar = {
         let toolbar = RichEditorToolbar(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 44))
-        toolbar.options = RichEditorDefaultOption.all
         return toolbar
     }()
 
@@ -33,7 +32,7 @@ class ViewController: UIViewController {
         toolbar.editor = editorView
 
         // We will create a custom action that clears all the input text when it is pressed
-        let item = RichEditorOptionItem(image: nil, title: "Clear") { toolbar in
+        let item = RichEditorOptionItem(image: nil, title: "Clear") { toolbar, _ in
             toolbar.editor?.html = ""
         }
 
@@ -45,9 +44,16 @@ class ViewController: UIViewController {
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 
-		editorView.focus()
+		setFocusIfNeeded()
 	}
 
+	private var needsToSetFocus: Bool = false
+	private func setFocusIfNeeded() {
+		if needsToSetFocus {
+			editorView.focus()
+		}
+		needsToSetFocus = !needsToSetFocus
+	}
 }
 
 extension ViewController: RichEditorDelegate {
@@ -62,6 +68,8 @@ extension ViewController: RichEditorDelegate {
 
 	func richEditorDidLoad(_ editor: RichEditorView) {
 		editorView.setFont(UIFont(name: "Avenir-Book", size: 24)!)
+
+		setFocusIfNeeded()
 	}
 }
 

@@ -26,24 +26,36 @@ import UIKit
 
 /// RichBarButtonItem is a subclass of UIBarButtonItem that takes a callback as opposed to the target-action pattern
 @objcMembers open class RichBarButtonItem: UIBarButtonItem {
-    open var actionHandler: (() -> Void)?
+	public var isSelected: Bool = false
+	open var defaultTintColor = UIColor.black
+	open var selectedTintColor = UIColor.blue
+	open var actionHandler: ((_ item: RichBarButtonItem) -> Void)?
     
-    public convenience init(image: UIImage? = nil, handler: (() -> Void)? = nil) {
+	public convenience init(image: UIImage? = nil, handler: ((_ item: RichBarButtonItem) -> Void)? = nil) {
         self.init(image: image, style: .plain, target: nil, action: nil)
-        target = self
-        action = #selector(RichBarButtonItem.buttonWasTapped)
-        actionHandler = handler
+        commonInit(handler)
     }
     
-    public convenience init(title: String = "", handler: (() -> Void)? = nil) {
+    public convenience init(title: String = "", handler: ((_ item: RichBarButtonItem) -> Void)? = nil) {
         self.init(title: title, style: .plain, target: nil, action: nil)
-        target = self
-        action = #selector(RichBarButtonItem.buttonWasTapped)
-        actionHandler = handler
+        commonInit(handler)
     }
+
+	private func commonInit(_ handler: ((_ item: RichBarButtonItem) -> Void)?) {
+		target = self
+		action = #selector(RichBarButtonItem.buttonWasTapped)
+		actionHandler = handler
+		tintColor = defaultTintColor
+	}
     
-    @objc func buttonWasTapped() {
-        actionHandler?()
+	@objc func buttonWasTapped() {
+		isSelected = !isSelected
+		if isSelected {
+			tintColor = selectedTintColor
+		} else {
+			tintColor = defaultTintColor
+		}
+        actionHandler?(self)
     }
 }
 
@@ -109,6 +121,8 @@ import UIKit
 
         toolbarScroll.addSubview(toolbar)
 
+		options = [RichEditorDefaultOption.bold, RichEditorDefaultOption.italic, RichEditorDefaultOption.underline, RichEditorDefaultOption.strike, RichEditorDefaultOption.unorderedList]
+
         addSubview(backgroundToolbar)
         addSubview(toolbarScroll)
         updateToolbar()
@@ -117,20 +131,19 @@ import UIKit
     private func updateToolbar() {
         var buttons = [UIBarButtonItem]()
         for option in options {
-            let handler = { [weak self] in
-                if let strongSelf = self {
-                    option.action(strongSelf)
-                }
-            }
-
-            if let image = option.image {
-                let button = RichBarButtonItem(image: image, handler: handler)
-                buttons.append(button)
-            } else {
-                let title = option.title
-                let button = RichBarButtonItem(title: title, handler: handler)
-                buttons.append(button)
-            }
+			let handler = { [weak self] (item: RichBarButtonItem) in
+				if let strongSelf = self {
+					option.action(strongSelf, item)
+				}
+			}
+			var button: RichBarButtonItem
+			if let image = option.image {
+				button = RichBarButtonItem(image: image, handler: handler)
+			} else {
+				let title = option.title
+				button = RichBarButtonItem(title: title, handler: handler)
+			}
+			buttons.append(button)
         }
         toolbar.items = buttons
 

@@ -133,10 +133,6 @@ RE.updatePlaceholder = function() {
     }
 };
 
-RE.removeFormat = function() {
-    document.execCommand('removeFormat', false, null);
-};
-
 RE.setFontSize = function(size) {
 	document.body.style.setProperty('--font-size', size);
 };
@@ -199,8 +195,13 @@ RE.setTextColor = function(color) {
 RE.setTextBackgroundColor = function(color) {
     RE.restorerange();
     document.execCommand("styleWithCSS", null, true);
-    document.execCommand('hiliteColor', false, color);
+	document.execCommand('hiliteColor', false, color);
     document.execCommand("styleWithCSS", null, false);
+};
+
+RE.removeFormat = function() {
+	RE.restorerange();
+	document.execCommand('removeFormat', false, null);
 };
 
 RE.setHeading = function(heading) {
