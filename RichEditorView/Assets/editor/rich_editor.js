@@ -26,6 +26,37 @@ RE.editor = document.getElementById('editor');
 // Not universally supported, but seems to work in iOS 7 and 8
 document.addEventListener("selectionchange", function() {
     RE.backuprange();
+    var isBold = document.queryCommandState("bold");
+    var isItalic = document.queryCommandState("italic");
+    var isUnderline = document.queryCommandState("underline");
+    var isStrikeThrough = document.queryCommandState("strikeThrough");
+    var isInsertUnorderedList = document.queryCommandState("insertUnorderedList");
+
+    if (isBold) {
+        RE.callback("enableBold");
+	} else {
+        RE.callback("disableBold");
+    }
+    if (isItalic) {
+        RE.callback("enableItalic");
+    } else {
+        RE.callback("disableItalic");
+    }
+    if (isUnderline) {
+        RE.callback("enableUnderline");
+    } else {
+        RE.callback("disableUnderline");
+    }
+    if (isStrikeThrough) {
+        RE.callback("enableStrikeThrough");
+    } else {
+        RE.callback("disableStrikeThrough");
+    }
+    if (isInsertUnorderedList) {
+        RE.callback("enableUnorderedList");
+    } else {
+        RE.callback("disableUnorderedList");
+    }
 });
 
 //looks specifically for a Range selection and not a Caret selection

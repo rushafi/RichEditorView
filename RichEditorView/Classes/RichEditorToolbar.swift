@@ -26,10 +26,55 @@ import UIKit
 
 /// RichBarButtonItem is a subclass of UIBarButtonItem that takes a callback as opposed to the target-action pattern
 @objcMembers open class RichBarButtonItem: UIBarButtonItem {
-	public var isSelected: Bool = false
+	public var isSelected: Bool = false {
+		didSet {
+			updateTintColor()
+		}
+	}
 	open var defaultTintColor = UIColor.black
 	open var selectedTintColor = UIColor.blue
 	open var actionHandler: ((_ item: RichBarButtonItem) -> Void)?
+
+	var formattingType: FormattingType? {
+		didSet {
+			let defaultCenter = NotificationCenter.default
+
+			guard let formattingType = self.formattingType else {return}
+
+			switch formattingType {
+			case .bold:
+				defaultCenter.addObserver(forName: Notification.Name.RichEditor.BoldFormattingChanged, object: nil, queue: OperationQueue.main) { (notification) -> Void in
+					if let flag = notification.userInfo!["flag"] as? Bool {
+						self.isSelected = flag
+					}
+				}
+			case .italic:
+				defaultCenter.addObserver(forName: Notification.Name.RichEditor.ItalicFormattingChanged, object: nil, queue: OperationQueue.main) { (notification) -> Void in
+					if let flag = notification.userInfo!["flag"] as? Bool {
+						self.isSelected = flag
+					}
+				}
+			case .underline:
+				defaultCenter.addObserver(forName: Notification.Name.RichEditor.UnderlineFormattingChanged, object: nil, queue: OperationQueue.main) { (notification) -> Void in
+					if let flag = notification.userInfo!["flag"] as? Bool {
+						self.isSelected = flag
+					}
+				}
+			case .strikeThrough:
+				defaultCenter.addObserver(forName: Notification.Name.RichEditor.StrikeThroughFormattingChanged, object: nil, queue: OperationQueue.main) { (notification) -> Void in
+					if let flag = notification.userInfo!["flag"] as? Bool {
+						self.isSelected = flag
+					}
+				}
+			case .unorderedList:
+				defaultCenter.addObserver(forName: Notification.Name.RichEditor.UnorderedListFormattingChanged, object: nil, queue: OperationQueue.main) { (notification) -> Void in
+					if let flag = notification.userInfo!["flag"] as? Bool {
+						self.isSelected = flag
+					}
+				}
+			}
+		}
+	}
     
 	public convenience init(image: UIImage? = nil, handler: ((_ item: RichBarButtonItem) -> Void)? = nil) {
         self.init(image: image, style: .plain, target: nil, action: nil)
@@ -50,13 +95,17 @@ import UIKit
     
 	@objc func buttonWasTapped() {
 		isSelected = !isSelected
+		updateTintColor()
+        actionHandler?(self)
+    }
+
+	private func updateTintColor() {
 		if isSelected {
 			tintColor = selectedTintColor
 		} else {
 			tintColor = defaultTintColor
 		}
-        actionHandler?(self)
-    }
+	}
 }
 
 /// RichEditorToolbar is UIView that contains the toolbar for actions that can be performed on a RichEditorView
@@ -143,6 +192,7 @@ import UIKit
 				let title = option.title
 				button = RichBarButtonItem(title: title, handler: handler)
 			}
+			option.configure(withItem: button)
 			buttons.append(button)
         }
         toolbar.items = buttons

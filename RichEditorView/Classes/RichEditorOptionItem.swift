@@ -22,6 +22,8 @@ public protocol RichEditorOption {
     /// - parameter editor: The RichEditorToolbar that the RichEditorOption was being displayed in when tapped.
     ///                     Contains a reference to the `editor` RichEditorView to perform actions on.
 	func action(_ editor: RichEditorToolbar, _ item: RichBarButtonItem)
+
+	func configure(withItem item: RichBarButtonItem)
 }
 
 /// RichEditorOptionItem is a concrete implementation of RichEditorOption.
@@ -48,6 +50,10 @@ public struct RichEditorOptionItem: RichEditorOption {
 	public func action(_ toolbar: RichEditorToolbar, _ item: RichBarButtonItem) {
         handler(toolbar, item)
     }
+
+	public func configure(withItem item: RichBarButtonItem) {
+		//
+	}
 }
 
 /// RichEditorOptions is an enum of standard editor actions
@@ -168,4 +174,21 @@ public enum RichEditorDefaultOption: RichEditorOption {
         case .link: toolbar.delegate?.richEditorToolbarInsertLink?(toolbar)
         }
     }
+
+	public func configure(withItem item: RichBarButtonItem) {
+		switch self {
+		case .bold:
+			item.formattingType = .bold
+		case .italic:
+			item.formattingType = .italic
+		case .underline:
+			item.formattingType = .underline
+		case .strike:
+			item.formattingType = .strikeThrough
+		case .unorderedList:
+			item.formattingType = .unorderedList
+		default:
+			item.formattingType = nil
+		}
+	}
 }

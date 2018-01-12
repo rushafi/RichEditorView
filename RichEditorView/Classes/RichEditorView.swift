@@ -7,6 +7,34 @@
 
 import UIKit
 
+public enum FormattingType {
+	case bold
+	case italic
+	case underline
+	case strikeThrough
+	case unorderedList
+}
+
+public class FormattingUpdate {
+	public var type: FormattingType
+	public var enabled: Bool
+
+	init(_ type: FormattingType, _ enabled: Bool) {
+		self.type = type
+		self.enabled = enabled
+	}
+}
+
+extension Notification.Name {
+	struct RichEditor {
+		static let BoldFormattingChanged = Notification.Name(rawValue: "boldFormattingChanged")
+		static let ItalicFormattingChanged = Notification.Name(rawValue: "italicFormattingChanged")
+		static let UnderlineFormattingChanged = Notification.Name(rawValue: "underlineFormattingChanged")
+		static let StrikeThroughFormattingChanged = Notification.Name(rawValue: "strikeThroughFormattingChanged")
+		static let UnorderedListFormattingChanged = Notification.Name(rawValue: "unrderedListFormattingChanged")
+	}
+}
+
 /// RichEditorDelegate defines callbacks for the delegate of the RichEditorView
 @objc public protocol RichEditorDelegate: class {
 
@@ -513,7 +541,8 @@ import UIKit
     
     /// Called when actions are received from JavaScript
     /// - parameter method: String with the name of the method and optional parameters that were passed in
-    private func performCommand(_ method: String) {
+	private func performCommand(_ method: String) {
+		var formattingUpdates: [FormattingUpdate] = []
         if method.hasPrefix("ready") {
             // If loading for the first time, we have to set the content HTML to be displayed
             if !isEditorLoaded {
@@ -554,6 +583,52 @@ import UIKit
             let action = method.replacingCharacters(in: range, with: "")
             delegate?.richEditor?(self, handle: action)
         }
+		else if method.hasPrefix("enableBold") {
+			formattingUpdates.append(FormattingUpdate(.bold, true))
+		}
+		else if method.hasPrefix("disableBold") {
+			formattingUpdates.append(FormattingUpdate(.bold, false))
+		}
+		else if method.hasPrefix("enableItalic") {
+			formattingUpdates.append(FormattingUpdate(.italic, true))
+		}
+		else if method.hasPrefix("disableItalic") {
+			formattingUpdates.append(FormattingUpdate(.italic, false))
+		}
+		else if method.hasPrefix("enableUnderline") {
+			formattingUpdates.append(FormattingUpdate(.underline, true))
+		}
+		else if method.hasPrefix("disableUnderline") {
+			formattingUpdates.append(FormattingUpdate(.underline, false))
+		}
+		else if method.hasPrefix("enableStrikeThrough") {
+			formattingUpdates.append(FormattingUpdate(.strikeThrough, true))
+		}
+		else if method.hasPrefix("disableStrikeThrough") {
+			formattingUpdates.append(FormattingUpdate(.strikeThrough, false))
+		}
+		else if method.hasPrefix("enableUnorderedList") {
+			formattingUpdates.append(FormattingUpdate(.unorderedList, true))
+		}
+		else if method.hasPrefix("disableUnorderedList") {
+			formattingUpdates.append(FormattingUpdate(.unorderedList, false))
+		}
+
+		for update in formattingUpdates {
+			let defaultCenter = NotificationCenter.default
+			switch update.type {
+			case .bold:
+				defaultCenter.post(name: Notification.Name.RichEditor.BoldFormattingChanged, object: nil, userInfo: ["flag": update.enabled])
+			case .italic:
+				defaultCenter.post(name: Notification.Name.RichEditor.ItalicFormattingChanged, object: nil, userInfo: ["flag": update.enabled])
+			case .underline:
+				defaultCenter.post(name: Notification.Name.RichEditor.UnderlineFormattingChanged, object: nil, userInfo: ["flag": update.enabled])
+			case .strikeThrough:
+				defaultCenter.post(name: Notification.Name.RichEditor.StrikeThroughFormattingChanged, object: nil, userInfo: ["flag": update.enabled])
+			case .unorderedList:
+				defaultCenter.post(name: Notification.Name.RichEditor.UnorderedListFormattingChanged, object: nil, userInfo: ["flag": update.enabled])
+			}
+		}
     }
 
     /// Called by the UITapGestureRecognizer when the user taps the view.
