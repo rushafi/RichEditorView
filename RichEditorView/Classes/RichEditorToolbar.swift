@@ -130,6 +130,23 @@ import UIKit
         set { backgroundToolbar.barTintColor = newValue }
     }
 
+	open var itemSpacing: CGFloat? = CGFloat(33.0) {
+		didSet {
+			updateToolbar()
+		}
+	}
+
+	open var defaultTintColor = UIColor.black {
+		didSet {
+			updateToolbar()
+		}
+	}
+	open var selectedTintColor = UIColor.blue {
+		didSet {
+			updateToolbar()
+		}
+	}
+
     private var toolbarScroll: UIScrollView
     private var toolbar: UIToolbar
     private var backgroundToolbar: UIToolbar
@@ -192,10 +209,14 @@ import UIKit
 				let title = option.title
 				button = RichBarButtonItem(title: title, handler: handler)
 			}
+			button.defaultTintColor = defaultTintColor
+			button.selectedTintColor = selectedTintColor
 			option.configure(withItem: button)
 			buttons.append(button)
         }
-        toolbar.items = buttons
+		let separator = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+		separator.width = itemSpacing!
+        toolbar.items = Array(buttons.map {[$0]}.joined(separator: [separator]))
 
         let defaultIconWidth: CGFloat = 22
         let barButtonItemMargin: CGFloat = 11
