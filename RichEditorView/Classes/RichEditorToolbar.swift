@@ -130,12 +130,6 @@ import UIKit
         set { backgroundToolbar.barTintColor = newValue }
     }
 
-	open var itemSpacing: CGFloat? = CGFloat(33.0) {
-		didSet {
-			updateToolbar()
-		}
-	}
-
 	open var defaultTintColor = UIColor.black {
 		didSet {
 			updateToolbar()
@@ -214,8 +208,7 @@ import UIKit
 			option.configure(withItem: button)
 			buttons.append(button)
         }
-		let separator = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-		separator.width = itemSpacing!
+		let separator = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         toolbar.items = Array(buttons.map {[$0]}.joined(separator: [separator]))
 
         let defaultIconWidth: CGFloat = 22
