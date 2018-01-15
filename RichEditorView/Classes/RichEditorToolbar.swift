@@ -126,8 +126,8 @@ import UIKit
 
     /// The tint color to apply to the toolbar background.
     open var barTintColor: UIColor? {
-        get { return backgroundToolbar.barTintColor }
-        set { backgroundToolbar.barTintColor = newValue }
+        get { return toolbar.barTintColor }
+        set { toolbar.barTintColor = newValue }
     }
 
 	open var defaultTintColor = UIColor.black {
@@ -143,12 +143,10 @@ import UIKit
 
     private var toolbarScroll: UIScrollView
     private var toolbar: UIToolbar
-    private var backgroundToolbar: UIToolbar
-    
+
     public override init(frame: CGRect) {
         toolbarScroll = UIScrollView()
         toolbar = UIToolbar()
-        backgroundToolbar = UIToolbar()
         super.init(frame: frame)
         setup()
     }
@@ -156,7 +154,6 @@ import UIKit
     public required init?(coder aDecoder: NSCoder) {
         toolbarScroll = UIScrollView()
         toolbar = UIToolbar()
-        backgroundToolbar = UIToolbar()
         super.init(coder: aDecoder)
         setup()
     }
@@ -165,27 +162,22 @@ import UIKit
         autoresizingMask = .flexibleWidth
         backgroundColor = .clear
 
-        backgroundToolbar.frame = bounds
-        backgroundToolbar.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-		backgroundToolbar.isTranslucent = false
-
-        toolbar.autoresizingMask = .flexibleWidth
-        toolbar.backgroundColor = .clear
+		toolbar.autoresizingMask = .flexibleWidth
+		toolbar.backgroundColor = .black
 		toolbar.isTranslucent = false
-        toolbar.setBackgroundImage(UIImage(), forToolbarPosition: .any, barMetrics: .default)
-        toolbar.setShadowImage(UIImage(), forToolbarPosition: .any)
+		toolbar.setBackgroundImage(UIImage(), forToolbarPosition: .any, barMetrics: .default)
+		toolbar.setShadowImage(UIImage(), forToolbarPosition: .any)
 
-        toolbarScroll.frame = bounds
-        toolbarScroll.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        toolbarScroll.showsHorizontalScrollIndicator = false
-        toolbarScroll.showsVerticalScrollIndicator = false
-        toolbarScroll.backgroundColor = .clear
+		toolbarScroll.frame = bounds
+		toolbarScroll.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+		toolbarScroll.showsHorizontalScrollIndicator = false
+		toolbarScroll.showsVerticalScrollIndicator = false
+		toolbarScroll.backgroundColor = .clear
 
         toolbarScroll.addSubview(toolbar)
 
 		options = [RichEditorDefaultOption.bold, RichEditorDefaultOption.italic, RichEditorDefaultOption.underline, RichEditorDefaultOption.strike, RichEditorDefaultOption.unorderedList]
 
-        addSubview(backgroundToolbar)
         addSubview(toolbarScroll)
         updateToolbar()
     }
