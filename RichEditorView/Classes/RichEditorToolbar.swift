@@ -167,9 +167,11 @@ import UIKit
 
         backgroundToolbar.frame = bounds
         backgroundToolbar.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+		backgroundToolbar.isTranslucent = false
 
         toolbar.autoresizingMask = .flexibleWidth
         toolbar.backgroundColor = .clear
+		toolbar.isTranslucent = false
         toolbar.setBackgroundImage(UIImage(), forToolbarPosition: .any, barMetrics: .default)
         toolbar.setShadowImage(UIImage(), forToolbarPosition: .any)
 
