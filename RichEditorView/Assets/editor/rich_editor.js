@@ -157,7 +157,8 @@ RE.setFontColor = function(color) {
 };
 
 RE.updatePlaceholder = function() {
-    if (RE.editor.textContent.length > 0) {
+    var isInsertUnorderedList = document.queryCommandState("insertUnorderedList");
+    if (RE.editor.textContent.length > 0 || isInsertUnorderedList) {
         RE.editor.classList.remove("placeholder");
     } else {
         RE.editor.classList.add("placeholder");
